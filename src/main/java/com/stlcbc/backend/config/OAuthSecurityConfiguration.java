@@ -17,4 +17,6 @@ public class OAuthSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .oauth2ResourceServer()
                     .jwt();
     }
+
+
 }

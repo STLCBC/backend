@@ -2,6 +2,9 @@ package com.stlcbc.backend.controllers;
 
 import com.stlcbc.backend.http.OktaClient;
 import com.stlcbc.backend.models.User;
+import com.stlcbc.backend.models.okta.OktaCredentials;
+import com.stlcbc.backend.models.okta.OktaProfile;
+import com.stlcbc.backend.models.okta.OktaUser;
 import com.stlcbc.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,13 +12,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-@RestController("/users")
+@RestController
+@RequestMapping("/api/users")
 public class UsersController {
 
     private OktaClient oktaClient;
@@ -40,20 +44,11 @@ public class UsersController {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
-        Map<String, String> profile = new HashMap<>();
-        profile.put("firstName", user.getFirstName());
-        profile.put("lastName", user.getLastName());
-        profile.put("email", user.getUsername());
-        profile.put("login", user.getUsername());
+        OktaProfile profile = new OktaProfile(user.getFirstName(), user.getLastName(), user.getUsername(), user.getUsername());
+        OktaCredentials credentials = new OktaCredentials(user.getPassword());
+        OktaUser oktaUser = new OktaUser(profile, credentials);
 
-        Map<String, String> credentials = new HashMap<>();
-        credentials.put("password", user.getPassword());
-
-        Map<String, Object> request = new HashMap<>();
-        request.put("profile", profile);
-        request.put("credentials", credentials);
-
-        Map<String, Object> createdUser = oktaClient.createUser("SSWS " + oktaToken, request);
+        Map<String, Object> createdUser = oktaClient.createUser("SSWS " + oktaToken, oktaUser);
         user.setIsAdmin(false);
         user.setOktaId((String) createdUser.get("id"));
 

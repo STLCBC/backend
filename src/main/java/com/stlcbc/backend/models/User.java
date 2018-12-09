@@ -33,16 +33,20 @@ public class User {
 
     private String username;
 
+    @Column(name = "firstName")
     private String firstName;
 
+    @Column(name = "lastName")
     private String lastName;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Transient
     private String password;
 
+    @Column(name = "oktaId")
     private String oktaId;
 
+    @Column(name = "isAdmin")
     private Boolean isAdmin;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -51,6 +55,6 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     private Set<Event> events;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
     private Set<Rating> ratings;
 }

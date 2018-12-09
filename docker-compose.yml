@@ -4,8 +4,8 @@ services:
     image: "mysql:8.0.12"
     command: --innodb_use_native_aio=0
     ports:
-    - "3306:3306"
+    - "3307:3306"
     env_file:
-      - .env
+      - backend-db.env
     volumes:
-    - /DockerShare/serverhealth-db:/var/lib/mysql
+    - /DockerShare/stlcbc-db:/var/lib/mysql

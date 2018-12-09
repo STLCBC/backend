@@ -1,5 +1,7 @@
 package com.stlcbc.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,14 +32,14 @@ public class Brewery {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column
     private String name;
 
     private Boolean visited;
 
-    @OneToMany(mappedBy = "brewery", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "brewery", fetch = FetchType.LAZY)
     private Set<Rating> ratings;
 
-    @OneToMany(mappedBy = "brewery", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "brewery", fetch = FetchType.LAZY)
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Set<Event> events;
 }
