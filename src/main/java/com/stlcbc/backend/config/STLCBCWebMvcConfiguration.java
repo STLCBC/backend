@@ -4,24 +4,31 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import java.util.List;
+
 @Configuration
-public class STLCBCWebMvcConfiguration {
+public class STLCBCWebMvcConfiguration implements WebMvcConfigurer {
 
 
-    @Bean
-    public HttpMessageConverters additionalConverters() {
-        return new HttpMessageConverters(jacksonMessageConverter());
-    }
+    @Value("${cors.allowed-origin}")
+    private String allowedOrigin;
+
 
     // Here we register the Hibernate4Module into an ObjectMapper,
     // then use this custom ObjectMapper
     // to the MessageConverter
+    @Bean
     public MappingJackson2HttpMessageConverter jacksonMessageConverter(){
         MappingJackson2HttpMessageConverter messageConverter = new MappingJackson2HttpMessageConverter();
 
@@ -34,5 +41,10 @@ public class STLCBCWebMvcConfiguration {
         messageConverter.setObjectMapper(mapper);
         return messageConverter;
 
+    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**").allowedOrigins(allowedOrigin);
     }
 }
