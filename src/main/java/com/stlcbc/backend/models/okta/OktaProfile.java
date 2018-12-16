@@ -1,16 +1,14 @@
 package com.stlcbc.backend.models.okta;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor @RequiredArgsConstructor
 public class OktaProfile {
 
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String login;
+    private @NonNull String firstName;
+    private @NonNull String lastName;
+    private @NonNull String email;
+    private @NonNull String login;
+    private Boolean admin = false;
 }

@@ -82,4 +82,19 @@ public class EventController {
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+
+    @GetMapping("/validate/{code}")
+    ResponseEntity<?> validateCode(@PathVariable("code") String code){
+        try{
+            UUID eventCode = UUID.fromString(code);
+
+            Optional<Event> event = this.eventRepository.findByCode(eventCode);
+
+            return event.map(event1 -> new ResponseEntity<>(event1, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+
+        } catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+    }
 }

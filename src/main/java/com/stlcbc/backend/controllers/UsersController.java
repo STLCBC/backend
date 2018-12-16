@@ -29,6 +29,9 @@ public class UsersController {
     @Value("${auth.api-token}")
     private String oktaToken;
 
+    @Value("${auth.group-id}")
+    private String oktaGroupId;
+
     @Autowired
     public UsersController(OktaClient oktaClient, UserRepository userRepository){
         this.oktaClient = oktaClient;
@@ -49,6 +52,7 @@ public class UsersController {
         OktaUser oktaUser = new OktaUser(profile, credentials);
 
         Map<String, Object> createdUser = oktaClient.createUser("SSWS " + oktaToken, oktaUser);
+        oktaClient.addUserToGroup("SSWS " + oktaToken, oktaGroupId, (String) createdUser.get("id"));
         user.setIsAdmin(false);
         user.setOktaId((String) createdUser.get("id"));
 

@@ -12,13 +12,16 @@ public class OAuthSecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                    .antMatchers("/api/users/register").permitAll()
+                    .antMatchers(HttpMethod.POST,"/api/users/register", "/api/users/register/").permitAll()
                     .antMatchers(HttpMethod.GET, "/api/breweries/").permitAll()
                     .antMatchers(HttpMethod.OPTIONS, "/api/**").permitAll()
                     .anyRequest().authenticated()
                     .and()
                 .oauth2ResourceServer()
-                    .jwt();
+                    .jwt()
+                        .and()
+                    .and()
+                .csrf().disable();
     }
 
 

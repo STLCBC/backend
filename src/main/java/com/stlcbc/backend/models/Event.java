@@ -52,9 +52,8 @@ public class Event {
         inverseJoinColumns = @JoinColumn(name = "event_id", referencedColumnName = "id"))
     private Set<User> attendees;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "brewery_id")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Brewery brewery;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "event")
