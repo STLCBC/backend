@@ -65,9 +65,9 @@ public class RatingController {
         }
 
         Event event = optionalEvent.get();
-        if(!event.getCode().equals(UUID.fromString(eventCheckIn.getCode()))){
+        /**if(!event.getCode().equals(UUID.fromString(eventCheckIn.getCode()))){
             return new ResponseEntity<>("Invalid event code", HttpStatus.BAD_REQUEST);
-        }
+        }*/
 
 
         Rating rating = eventCheckIn.getRating();
